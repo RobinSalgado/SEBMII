@@ -1711,7 +1711,7 @@ OUTPUT(PIT_leds.axf elf32-littlearm)
  .debug_line    0x00003466      0x2a4 ./board/pin_mux.o
  .debug_line    0x0000370a      0x1f0 ./CMSIS/system_MK64F12.o
 
-.debug_str      0x00000000    0x81f35
+.debug_str      0x00000000    0x81f3b
  .debug_str     0x00000000    0x78ed7 ./utilities/fsl_debug_console.o
                               0x78fc4 (size before relaxing)
  .debug_str     0x00078ed7      0xa25 ./utilities/fsl_io.o
@@ -1722,29 +1722,29 @@ OUTPUT(PIT_leds.axf elf32-littlearm)
                               0x79457 (size before relaxing)
  .debug_str     0x0007a161      0x80f ./startup/startup_mk64f12.o
                                0x2e9c (size before relaxing)
- .debug_str     0x0007a970     0x1f81 ./source/PIT_leds.o
-                              0x7ac24 (size before relaxing)
- .debug_str     0x0007c8f1       0x1f ./source/semihost_hardfault.o
+ .debug_str     0x0007a970     0x1f87 ./source/PIT_leds.o
+                              0x7ac2a (size before relaxing)
+ .debug_str     0x0007c8f7       0x1f ./source/semihost_hardfault.o
                                0x2624 (size before relaxing)
- .debug_str     0x0007c910     0x1782 ./drivers/fsl_clock.o
+ .debug_str     0x0007c916     0x1782 ./drivers/fsl_clock.o
                               0x7aeb9 (size before relaxing)
- .debug_str     0x0007e092     0x2bdc ./drivers/fsl_flash.o
+ .debug_str     0x0007e098     0x2bdc ./drivers/fsl_flash.o
                               0x7bdf3 (size before relaxing)
- .debug_str     0x00080c6e       0x96 ./drivers/fsl_gpio.o
+ .debug_str     0x00080c74       0x96 ./drivers/fsl_gpio.o
                               0x7926d (size before relaxing)
- .debug_str     0x00080d04      0x405 ./drivers/fsl_smc.o
+ .debug_str     0x00080d0a      0x405 ./drivers/fsl_smc.o
                               0x79828 (size before relaxing)
- .debug_str     0x00081109      0x9ea ./drivers/fsl_uart.o
+ .debug_str     0x0008110f      0x9ea ./drivers/fsl_uart.o
                               0x7a7aa (size before relaxing)
- .debug_str     0x00081af3       0x37 ./board/board.o
+ .debug_str     0x00081af9       0x37 ./board/board.o
                               0x79b27 (size before relaxing)
- .debug_str     0x00081b2a      0x2a3 ./board/clock_config.o
+ .debug_str     0x00081b30      0x2a3 ./board/clock_config.o
                               0x79920 (size before relaxing)
- .debug_str     0x00081dcd       0x31 ./board/peripherals.o
+ .debug_str     0x00081dd3       0x31 ./board/peripherals.o
                                0x2635 (size before relaxing)
- .debug_str     0x00081dfe       0x8a ./board/pin_mux.o
+ .debug_str     0x00081e04       0x8a ./board/pin_mux.o
                               0x7909b (size before relaxing)
- .debug_str     0x00081e88       0xad ./CMSIS/system_MK64F12.o
+ .debug_str     0x00081e8e       0xad ./CMSIS/system_MK64F12.o
                               0x77eb8 (size before relaxing)
 
 .comment        0x00000000       0x7f

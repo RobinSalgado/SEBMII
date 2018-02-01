@@ -15,7 +15,7 @@
 #include "fsl_port.h"
 
 /* TODO: insert other definitions and declarations here. */
-#define GET1SECOND ((0x1312CFF)*2)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
+#define GET1SECOND 0x1312CFF	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
 /*
  * @brief   Application entry point.
  */
@@ -47,7 +47,8 @@ PIT->MCR = PIT_MCR_FRZ_SHIFT; // turn on the pit
 
 PIT_StartTimer(PIT, kPIT_Chnl_0);
 PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
-PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, GET1SECOND);
+PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, CLOCK_GetBusClkFreq(BUS_CLK);
+
 
 NVIC_EnableIRQ(PIT0_IRQn);// Enable interrupt registers ISER and ICPR
 
