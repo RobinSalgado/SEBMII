@@ -1,0 +1,135 @@
+
+Discarded input sections
+
+ .group         0x00000000        0x8 ./alarm.o
+ .text          0x00000000        0x0 ./alarm.o
+ .data          0x00000000        0x0 ./alarm.o
+ .bss           0x00000000        0x0 ./alarm.o
+ .bss.current_hour
+                0x00000000       0x10 ./alarm.o
+ .bss.alarm     0x00000000       0xd0 ./alarm.o
+ .bss.alarm_number
+                0x00000000        0x4 ./alarm.o
+ .text.set_alarm
+                0x00000000       0x7c ./alarm.o
+ .text.check_status
+                0x00000000       0x84 ./alarm.o
+ .text.refresh_hour
+                0x00000000       0x60 ./alarm.o
+ .debug_info    0x00000000      0x160 ./alarm.o
+ .debug_abbrev  0x00000000       0xf4 ./alarm.o
+ .debug_aranges
+                0x00000000       0x30 ./alarm.o
+ .debug_ranges  0x00000000       0x20 ./alarm.o
+ .debug_macro   0x00000000       0x15 ./alarm.o
+ .debug_macro   0x00000000      0x8bc ./alarm.o
+ .debug_line    0x00000000       0xac ./alarm.o
+ .debug_str     0x00000000     0x25e4 ./alarm.o
+ .comment       0x00000000       0x80 ./alarm.o
+ .debug_frame   0x00000000       0x80 ./alarm.o
+ .ARM.attributes
+                0x00000000       0x33 ./alarm.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RamLoc           0x00000000         0x00004000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./alarm.o
+START GROUP
+LOAD c:/nxp/mcuxpressoide_10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m\libcr_c.a
+LOAD c:/nxp/mcuxpressoide_10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m\libcr_eabihelpers.a
+END GROUP
+                0x00000000                __base_RamLoc = 0x0
+                0x00000000                __base_RAM = 0x0
+                0x00004000                __top_RamLoc = 0x4000
+                0x00004000                __top_RAM = 0x4000
+
+.text           0x00000000       0x14
+ FILL mask 0xff
+                0x00000000                __vectors_start__ = ABSOLUTE (.)
+ *(.isr_vector)
+                0x00000000                . = ALIGN (0x4)
+                0x00000000                __section_table_start = .
+                0x00000000                __data_section_table = .
+                0x00000000        0x4 LONG 0x14 LOADADDR (.data)
+                0x00000004        0x4 LONG 0x14 ADDR (.data)
+                0x00000008        0x4 LONG 0x0 SIZEOF (.data)
+                0x0000000c                __data_section_table_end = .
+                0x0000000c                __bss_section_table = .
+                0x0000000c        0x4 LONG 0x14 ADDR (.bss)
+                0x00000010        0x4 LONG 0x0 SIZEOF (.bss)
+                0x00000014                __bss_section_table_end = .
+                0x00000014                __section_table_end = .
+ *(.after_vectors*)
+ *(.text*)
+ *(.rodata .rodata.* .constdata .constdata.*)
+                0x00000014                . = ALIGN (0x4)
+
+.glue_7         0x00000014        0x0
+ .glue_7        0x00000014        0x0 linker stubs
+
+.glue_7t        0x00000014        0x0
+ .glue_7t       0x00000014        0x0 linker stubs
+
+.vfp11_veneer   0x00000014        0x0
+ .vfp11_veneer  0x00000014        0x0 linker stubs
+
+.v4_bx          0x00000014        0x0
+ .v4_bx         0x00000014        0x0 linker stubs
+
+.iplt           0x00000014        0x0
+ .iplt          0x00000014        0x0 ./alarm.o
+
+.rel.dyn        0x00000014        0x0
+ .rel.iplt      0x00000014        0x0 ./alarm.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x00000014                __exidx_start = .
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x00000014                __exidx_end = .
+                0x00000014                _etext = .
+
+.uninit_RESERVED
+                0x00000014        0x0
+ *(.bss.$RESERVED*)
+                0x00000014                . = ALIGN (0x4)
+                0x00000014                _end_uninit_RESERVED = .
+
+.data           0x00000014        0x0
+ FILL mask 0xff
+                0x00000014                _data = .
+ *(vtable)
+ *(.ramfunc*)
+ *(.data*)
+                0x00000014                . = ALIGN (0x4)
+                0x00000014                _edata = .
+
+.igot.plt       0x00000014        0x0
+ .igot.plt      0x00000014        0x0 ./alarm.o
+
+.bss            0x00000014        0x0
+                0x00000014                _bss = .
+ *(.bss*)
+ *(COMMON)
+                0x00000014                . = ALIGN (0x4)
+                0x00000014                _ebss = .
+                [!provide]                PROVIDE (end, .)
+
+.noinit         0x00000014        0x0
+                0x00000014                _noinit = .
+ *(.noinit*)
+                0x00000014                . = ALIGN (0x4)
+                0x00000014                _end_noinit = .
+                [!provide]                PROVIDE (_pvHeapStart, DEFINED (__user_heap_base)?__user_heap_base:.)
+                [!provide]                PROVIDE (_vStackTop, DEFINED (__user_stack_top)?__user_stack_top:(__top_RamLoc - 0x0))
+                0x00000000                _image_start = LOADADDR (.text)
+                0x00000014                _image_end = (LOADADDR (.data) + SIZEOF (.data))
+                0x00000014                _image_size = (_image_end - _image_start)
+OUTPUT(estandares de cod.axf elf32-littlearm)

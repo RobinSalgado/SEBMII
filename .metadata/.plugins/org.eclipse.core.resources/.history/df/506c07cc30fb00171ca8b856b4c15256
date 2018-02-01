@@ -1,0 +1,22 @@
+/*
+ * Colors.c
+ *
+ *  Created on: 09/03/2016
+ *      Author: Usuario
+ */
+
+#include "Colors.h"
+#include "GPIO.h"
+
+void ColorBlue(COLORS LEDS){
+
+}
+void ColorGreen(COLORS LEDS){
+
+}
+void ColorRed(){
+
+}
+void ColorWhite(){
+
+}

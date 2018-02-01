@@ -1,0 +1,25 @@
+/*
+ * Colors.h
+ *
+ *  Created on: 09/03/2016
+ *      Author: Usuario
+ */
+
+#ifndef SOURCES_COLORS_H_
+#define SOURCES_COLORS_H_
+#include "MK64F12.h"
+
+typedef enum{BLUE,
+			 GREEN,
+			 RED,
+			 WHITE
+			} COLORS;
+
+void ColorBlue();
+void ColorGreen();
+void ColorRed();
+void ColorWhite();
+
+
+
+#endif /* SOURCES_COLORS_H_ */

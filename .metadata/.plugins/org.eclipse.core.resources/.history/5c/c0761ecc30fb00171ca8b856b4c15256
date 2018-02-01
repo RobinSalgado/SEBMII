@@ -1,0 +1,53 @@
+#include "MK64F12.h"
+#include "GPIO.h"
+#include "Colors.h"
+
+
+#define BLUE   0 // Etiqueta para definir estados
+#define RED    1 // Etiqueta para definir estados
+#define GREEN  2
+#define WHITE  3
+
+int main(void)
+{
+	uint8  input, selector;
+
+	GPIO_pinControlRegisterType pinControlRegisterLEDS = GPIO_MUX1;
+	GPIO_pinControlRegisterType pinControlRegisterSW = GPIO_MUX1|GPIO_PE|GPIO_PS;
+
+	const COLORS APUNTA = {ColorBlue, ColorGreen, ColorRed, ColorWhite};
+
+	SIM_SCGC5 |= GPIO_CLOCK_GATING_PORTA; /*Activamos el clock gating del puerto A*/
+	SIM_SCGC5 |= GPIO_CLOCK_GATING_PORTC; /*Activamos el clock gating del puerto C*/
+	SIM_SCGC5 |= GPIO_CLOCK_GATING_PORTE;
+	PORTB_PCR(BIT21)= pinControlRegisterLEDS; /*Declaramos el BIT 21 del puerto B (LED azúl) como GPIO */
+	PORTB_PCR(BIT22)= pinControlRegisterLEDS;
+	PORTE_PCR(BIT26)= pinControlRegisterLEDS;
+	PORTA_PCR(BIT4) = pinControlRegisterSW; /*Declaramos el BIT 4 del puerto A  como GPIO */
+	PORTC_PCR(BIT6) = pinControlRegisterSW; /*Declaramos el BIT 6 del puerto C  como GPIO */
+
+	GPIOB_PSOR |= 0x600000; /*Damos valor seguro al LED*/
+	GPIOE_PSOR |= 0x4000000;
+
+	GPIOB_PDDR |= 0x600000; /*INDICAMOS QUE ES DE ENTRADA*/
+	GPIOE_PDDR |= 0x4000000;
+
+	GPIOA_PDDR |= ~(0x010); /*INDICAMOS QUE ES DE ENTRADA*/
+	GPIOC_PDDR |= ~(0x040); /*INDICAMOS QUE ES DE ENTRADA*/
+
+
+	for(;;) {
+		input=GPIO_readPIN(GPIOA,BIT4);
+		input=GPIO_readPIN(GPIOC,BIT6)<<input;
+
+		if(input==0){
+			if(selector > 2)
+				selector = 0;
+			else
+				selector = selector +1;
+
+		}
+
+	}// end for
+
+}// end main
