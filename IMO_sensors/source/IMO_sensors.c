@@ -51,7 +51,7 @@
  */
 volatile bool g_MasterCompletionFlag = false;
 
-/*se va a llamar cuando se complete la transferencia*/
+/*se va a llamar cuando se complete la transferencia de enviío o de recepción */
 static void i2c_master_callback(I2C_Type *base, i2c_master_handle_t *handle, status_t status, void *
 userData){
 	/* Signal transfer success when received success status.*/
@@ -72,7 +72,7 @@ int main(void) {
 
 CLOCK_EnableClock(kCLOCK_PortE);
 
-port_pin_config_t config_i2c =
+port_pin_config_t config_i2c = //funciones alternativas en
  	{ kPORT_PullDisable, kPORT_SlowSlewRate, kPORT_PassiveFilterDisable,
 			kPORT_OpenDrainDisable, kPORT_LowDriveStrength, kPORT_MuxAlt5,
  			kPORT_UnlockRegister};
@@ -83,20 +83,23 @@ I2C_MasterGetDefaultConfig(&masterConfig);
 masterConfig.baudRate_Bps = 100000;
 I2C_MasterInit(I2C0, &masterConfig, CLOCK_GetBusClkFreq());
 
-i2c_master_transfer_t masterXfer;
+i2c_master_transfer_t masterXfer;// escritura y lectura
 
-uint8_t data_buffer = 0x0D;//register address del whoAMI
+//register address del whoAMI que tiene el valor de c7 esto con el objetivo de checar a la hora de leer si en efecto se escribió el whoAI
+uint8_t data_buffer = 0x0D;
 i2c_master_handle_t g_m_handle;
 volatile bool g_MasterCompletionFlag = false;
 
 
-masterXfer.slaveAddress = 0x1D;
+
+//nos basamos en la gráfica de la IMU y seguimos la secuencia del singly byte, porque queremos leer y escribir un byte
+masterXfer.slaveAddress = 0x1D;//es la dirección de la IMO que la sacamos del esquemático
 masterXfer.direction = kI2C_Write;
 masterXfer.subaddress = NULL;
-masterXfer.subaddressSize = 0;
+masterXfer.subaddressSize = 0; // la direcciín del registro whoAmI
 masterXfer.data = &data_buffer;
 masterXfer.dataSize = 1;
-masterXfer.flags =  kI2C_TransferNoStopFlag ;
+masterXfer.flags =  kI2C_TransferNoStopFlag ;// en el documento de la IMO y en la gráfica al terminar la primera transferencia no hay stop
 
 
 

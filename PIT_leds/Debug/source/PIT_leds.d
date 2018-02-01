@@ -18,7 +18,8 @@ source/PIT_leds.o source/PIT_leds.d: ../source/PIT_leds.c \
  C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\board/clock_config.h \
  C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\CMSIS/MK64F12.h \
  C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\utilities/fsl_debug_console.h \
- C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\drivers/fsl_pit.h
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\drivers/fsl_pit.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\drivers/fsl_port.h
 
 C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\board/board.h:
 
@@ -59,3 +60,5 @@ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\CMSIS/MK64F
 C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\utilities/fsl_debug_console.h:
 
 C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\drivers/fsl_pit.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\PIT_leds\drivers/fsl_port.h:
