@@ -15,7 +15,7 @@
 #include "fsl_port.h"
 
 /* TODO: insert other definitions and declarations here. */
-#define GET1SECOND ((0x1312CFF)*4)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
+#define GET1SECOND ((0x1312CFF)*2)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
 /*
  * @brief   Application entry point.
  */

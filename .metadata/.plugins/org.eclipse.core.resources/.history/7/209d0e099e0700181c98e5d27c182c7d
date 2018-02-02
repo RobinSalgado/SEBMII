@@ -15,51 +15,21 @@
 #include "fsl_port.h"
 
 /* TODO: insert other definitions and declarations here. */
-#define GET1SECOND ((0x1312CFF)*4)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
+#define GET1SECOND ((0x1312CFF)*2)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
 /*
  * @brief   Application entry point.
  */
-void LED_sequence(){
-	static uint8_t state = 0;
-	static uint8_t current_state = 0;
-		// Toggle Blue LED
-
-	if(0==current_state){
-	GPIO_WritePinOutput(GPIOB,22,1);
-GPIO_WritePinOutput(GPIOB,21,0);
-current_state++;
-	}else{
-		if(1 == current_state){
-			GPIO_WritePinOutput(GPIOB,21,1);
-			GPIO_WritePinOutput(GPIOE,26,0);
-			//state = ( 0 == state ) ? 1 : 0;
-			current_state++;
-		}else{
-			if (2 == current_state){
-				GPIO_WritePinOutput(GPIOE,26,1);
-				GPIO_WritePinOutput(GPIOB,22,0);
-
-							current_state = 0;
-			}
-		}
-	}
-
-/*
-GPIO_WritePinOutput(GPIOE,26,1);
-
-GPIO_WritePinOutput(GPIOB,21,0);
-GPIO_WritePinOutput(GPIOB,21,1);
-
-GPIO_WritePinOutput(GPIOB,22,0);
-GPIO_WritePinOutput(GPIOB,22,1);
-*/
-
-}
 
 void PIT0_IRQHandler(void){
 	// Clear interrupt
 	PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
-	 LED_sequence();
+	static uint8_t state = 0;
+
+		// Toggle Blue LED
+GPIO_WritePinOutput(GPIOB,21,state);
+state = ( 0 == state ) ? 1 : 0;
+
+
 }
 int main(void) {
 
@@ -72,8 +42,6 @@ int main(void) {
 
 
 CLOCK_EnableClock(kCLOCK_Pit0);
-CLOCK_EnableClock(kCLOCK_PortE);
-CLOCK_EnableClock(kCLOCK_PortB);
 
 PIT->MCR = PIT_MCR_FRZ_SHIFT; // turn on the pit
 
@@ -82,6 +50,7 @@ PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
 PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, GET1SECOND);
 
 NVIC_EnableIRQ(PIT0_IRQn);// Enable interrupt registers ISER and ICPR
+
 
 
 
@@ -95,15 +64,10 @@ gpio_pin_config_t led_config_gpio =
  { kGPIO_DigitalOutput, 1 };
 
  	GPIO_PinInit(GPIOB, 21, &led_config_gpio);
-	GPIO_PinInit(GPIOB, 22, &led_config_gpio);
- 	GPIO_PinInit(GPIOE, 26, &led_config_gpio);
-
  	PORT_SetPinConfig(PORTB, 21, &config_led);
- 	PORT_SetPinConfig(PORTB, 22, &config_led);
-	PORT_SetPinConfig(PORTE, 26, &config_led);
+
 //PIT_StopTimer(PIT, kPIT_Chnl_0); // para el segundo inciso de la tarea que pare el led
 
-// Green led: PTE26 & RED led: PTB21
 
 
 

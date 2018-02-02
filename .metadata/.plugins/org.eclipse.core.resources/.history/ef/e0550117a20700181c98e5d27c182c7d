@@ -15,35 +15,16 @@
 #include "fsl_port.h"
 
 /* TODO: insert other definitions and declarations here. */
-#define GET1SECOND ((0x1312CFF)*4)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
+#define GET1SECOND ((0x1312CFF)*2)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
 /*
  * @brief   Application entry point.
  */
 void LED_sequence(){
 	static uint8_t state = 0;
-	static uint8_t current_state = 0;
+
 		// Toggle Blue LED
-
-	if(0==current_state){
-	GPIO_WritePinOutput(GPIOB,22,1);
-GPIO_WritePinOutput(GPIOB,21,0);
-current_state++;
-	}else{
-		if(1 == current_state){
-			GPIO_WritePinOutput(GPIOB,21,1);
-			GPIO_WritePinOutput(GPIOE,26,0);
-			//state = ( 0 == state ) ? 1 : 0;
-			current_state++;
-		}else{
-			if (2 == current_state){
-				GPIO_WritePinOutput(GPIOE,26,1);
-				GPIO_WritePinOutput(GPIOB,22,0);
-
-							current_state = 0;
-			}
-		}
-	}
-
+GPIO_WritePinOutput(GPIOE,26,state);
+state = ( 0 == state ) ? 1 : 0;
 /*
 GPIO_WritePinOutput(GPIOE,26,1);
 

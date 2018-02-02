@@ -15,51 +15,23 @@
 #include "fsl_port.h"
 
 /* TODO: insert other definitions and declarations here. */
-#define GET1SECOND ((0x1312CFF)*4)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
+#define GET1SECOND ((0x1312CFF)*2)	// 1/20Mhz = 50ns   (1s/50ns)-1= 19,999,999 cycles or 0x1312CFF
 /*
  * @brief   Application entry point.
  */
-void LED_sequence(){
-	static uint8_t state = 0;
-	static uint8_t current_state = 0;
-		// Toggle Blue LED
-
-	if(0==current_state){
-	GPIO_WritePinOutput(GPIOB,22,1);
-GPIO_WritePinOutput(GPIOB,21,0);
-current_state++;
-	}else{
-		if(1 == current_state){
-			GPIO_WritePinOutput(GPIOB,21,1);
-			GPIO_WritePinOutput(GPIOE,26,0);
-			//state = ( 0 == state ) ? 1 : 0;
-			current_state++;
-		}else{
-			if (2 == current_state){
-				GPIO_WritePinOutput(GPIOE,26,1);
-				GPIO_WritePinOutput(GPIOB,22,0);
-
-							current_state = 0;
-			}
-		}
-	}
-
-/*
-GPIO_WritePinOutput(GPIOE,26,1);
-
-GPIO_WritePinOutput(GPIOB,21,0);
-GPIO_WritePinOutput(GPIOB,21,1);
-
-GPIO_WritePinOutput(GPIOB,22,0);
-GPIO_WritePinOutput(GPIOB,22,1);
-*/
-
-}
 
 void PIT0_IRQHandler(void){
 	// Clear interrupt
 	PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
-	 LED_sequence();
+	static uint8_t state = 0;
+
+		// Toggle Blue LED
+GPIO_WritePinOutput(GPIOB,21,state);
+state = ( 0 == state ) ? 1 : 0;
+
+GPIO_TogglePinsOutput(GPIOE, 24);
+
+
 }
 int main(void) {
 
@@ -82,6 +54,7 @@ PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
 PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, GET1SECOND);
 
 NVIC_EnableIRQ(PIT0_IRQn);// Enable interrupt registers ISER and ICPR
+
 
 
 
