@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSetManager>
+<workingSet editPageId="org.eclipse.cdt.ui.CElementWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1518705711028_2" label="Mini rtos" name="Mini rtos">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/rtos" type="4"/>
+</workingSet>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1516051286885_0" label="Window Working Set" name="Aggregate for window 1516051286884"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1518702651340_1" label="Window Working Set" name="Aggregate for window 1518702651340"/>
+<mruList name="Mini rtos"/>
 </workingSetManager>
