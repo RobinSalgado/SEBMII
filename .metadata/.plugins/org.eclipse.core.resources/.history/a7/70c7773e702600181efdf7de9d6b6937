@@ -1,0 +1,253 @@
+
+/*  SDK Included Files */
+#include "board.h"
+#include "fsl_debug_console.h"
+#include "fsl_i2c.h"
+#include "fsl_port.h"
+
+#include "pin_mux.h"
+#include "clock_config.h"
+
+/* FreeRTOS kernel includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
+
+/* SDK drivers*/
+#include "fsl_port.h"
+#include "fsl_device_registers.h"
+#include <stdio.h>
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+#define ACCEL_I2C_CLK_SRC I2C0_CLK_SRC
+#define I2C_BAUDRATE 100000U
+#define FOXS8700_WHOAMI 0xC7U
+
+
+#define RTC_slave_address 0x51 /*El slave address del RTC es 6F ya que la combinación de los 4-bits de código de control
+                               (1101)-> para el registro que hace operaciones de leer-escribir y los 3-bits del chip select
+                               (111)-> estos  son configurables siempre son así forman el slave address */
+#define SEG 0x00
+#define MINU 0x01
+#define HRS 0x02
+#define REAL_SEC 0x7F
+//#define REAL_SEC ~(0x80)
+#define RTC_I2C_BASEADDR I2C0
+
+
+
+#define RTC_task_PRIORITY (configMAX_PRIORITIES - 2)
+
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+
+static void I2C_RTC_init(void);
+static bool I2C_Write_RTC(I2C_Type *base, uint8_t device_addr, uint8_t reg_addr, uint8_t value);
+static bool I2C_Read_RTC(I2C_Type *base, uint8_t device_addr, uint8_t reg_addr, uint8_t *rxBuff, uint32_t rxSize);
+
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+
+
+i2c_master_handle_t RTC_handle;
+
+
+volatile bool g_MasterCompletionFlag = false;
+//volatile bool nakFlag = false;
+
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
+
+static void i2c_master_callback(I2C_Type *base, i2c_master_handle_t *handle, status_t status, void *userData)
+{
+    /* Signal transfer success when received success status. */
+    if (status == kStatus_Success)
+    {
+    	g_MasterCompletionFlag = true;
+    }
+
+}
+void I2C_RTC_init(void)
+{
+
+    uint32_t sourceClock = 0;
+
+    i2c_master_config_t masterConfig;
+
+    I2C_MasterGetDefaultConfig(&masterConfig);
+
+    masterConfig.baudRate_Bps = I2C_BAUDRATE;
+    masterConfig.enableMaster = true;
+    masterConfig.baudRate_Bps = 100000;
+    masterConfig.glitchFilterWidth = 0;
+
+    sourceClock = CLOCK_GetFreq(ACCEL_I2C_CLK_SRC);
+
+    I2C_MasterInit(RTC_I2C_BASEADDR, &masterConfig, sourceClock);
+
+}
+
+static bool I2C_Write_RTC(I2C_Type *base, uint8_t device_addr, uint8_t reg_addr, uint8_t value)
+{
+    i2c_master_transfer_t masterXfer;
+    memset(&masterXfer, 0, sizeof(masterXfer));
+
+    masterXfer.slaveAddress = device_addr;
+    masterXfer.direction = kI2C_Write;
+    masterXfer.subaddress = reg_addr;
+    masterXfer.subaddressSize = 1	;
+    masterXfer.data = &value;
+    masterXfer.dataSize = 1;
+    masterXfer.flags = kI2C_TransferDefaultFlag;
+
+    /*  direction=write : start+device_write;cmdbuff;xBuff; */
+    /*  direction=recive : start+device_write;cmdbuff;repeatStart+device_read;xBuff; */
+
+    I2C_MasterTransferNonBlocking(RTC_I2C_BASEADDR, &RTC_handle, &masterXfer);
+
+    /*  wait for transfer completed. */
+    while (!g_MasterCompletionFlag){}
+   	g_MasterCompletionFlag = false;
+
+    if (g_MasterCompletionFlag == true)
+    {
+    	g_MasterCompletionFlag = false;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+static bool I2C_Read_RTC(I2C_Type *base, uint8_t device_addr, uint8_t reg_addr, uint8_t *rxBuff, uint32_t rxSize)
+{
+    i2c_master_transfer_t masterXfer; /* variable that configures the structure for reading and stuff*/
+    memset(&masterXfer, 0, sizeof(masterXfer));
+    masterXfer.slaveAddress = device_addr;
+    masterXfer.direction = kI2C_Read;
+    masterXfer.subaddress = reg_addr;
+    masterXfer.subaddressSize = 1;
+    masterXfer.data = rxBuff;
+    masterXfer.dataSize = 1;
+    masterXfer.flags = kI2C_TransferDefaultFlag;
+
+    /*  direction=write : start+device_write;cmdbuff;xBuff; */
+    /*  direction=recive : start+device_write;cmdbuff;repeatStart+device_I2C_Read_RTC;xBuff; */
+
+    I2C_MasterTransferNonBlocking(RTC_I2C_BASEADDR, &RTC_handle, &masterXfer);
+
+    /*  wait for transfer completed. */
+    while (!g_MasterCompletionFlag){}
+   	g_MasterCompletionFlag = false;
+
+    if (g_MasterCompletionFlag == true)
+    {
+    	g_MasterCompletionFlag = false;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+void periodic_task(void *pvParameters) {
+//
+
+
+}
+
+
+
+
+/*!
+ * @brief Main function
+ */
+int main(void)
+{
+	BOARD_InitBootPins();
+	BOARD_InitBootClocks();
+	BOARD_InitBootPeripherals();
+    BOARD_InitDebugConsole();
+
+
+    port_pin_config_t config_i2c =
+    	{ kPORT_PullDisable, kPORT_SlowSlewRate, kPORT_PassiveFilterDisable,
+    	        kPORT_OpenDrainDisable, kPORT_LowDriveStrength, kPORT_MuxAlt5,
+    	        kPORT_UnlockRegister, };
+
+    CLOCK_EnableClock(kCLOCK_PortE);
+    PORT_SetPinConfig(PORTE, 24, &config_i2c);
+    PORT_SetPinConfig(PORTE, 25, &config_i2c);
+
+    I2C_MasterTransferCreateHandle(RTC_I2C_BASEADDR, &RTC_handle, i2c_master_callback, NULL);
+    I2C_RTC_init();
+   // uint8_t databyte = 0; //data to write
+    	        uint8_t write_reg = 0;
+    	        uint8_t readBuff[1];// byte for min, seg,hrs
+    	      //  uint8_t databyte_startCounting;
+    	        uint8_t hrs = 0x12;
+    	        uint8_t min = 0x15;
+    	        uint8_t seg = 0x00;
+
+    	                                                                                   //for(i = 0; i < delay; i++);
+
+
+    		                                                                                // volatile uint16_t delay;
+
+
+
+
+
+
+        /*D6, binary = 11010110 , decimal = 214, BCD = 56 seconds with the activation of the oscillation bit 0x80 hex*/
+    	        /*  databyte_startCounting = 0x80; //detailed RTCC REGISTER MAP page 10 (1000-000-0)	*/
+
+    			write_reg = SEG; /*configures register with a "0" for RTC, which is the seconds register */
+
+    			I2C_Write_RTC(RTC_I2C_BASEADDR, RTC_slave_address, write_reg, 0x00);//0x80 for start oscillation
+
+    			write_reg = MINU; /*configures register with a "1" for, RTC which is the minutes register */
+
+    			/*data byte = 0x00;//minutes that i want*/
+    			I2C_Write_RTC(RTC_I2C_BASEADDR, RTC_slave_address, write_reg, min);
+
+    			write_reg = HRS; /*configures register with a "1" for, RTC which is the minutes register */
+
+    			/*data byte = 0x11;//hour that i want*/
+    			I2C_Write_RTC(RTC_I2C_BASEADDR, RTC_slave_address, write_reg, hrs);
+
+    			//I2C_Write_RTC(RTC_I2C_BASEADDR, RTC_slave_address, write_reg, seg);
+
+
+
+    			 I2C_Read_RTC(RTC_I2C_BASEADDR, RTC_slave_address, HRS, readBuff, 1);
+    			 hrs = readBuff[0];
+    			 I2C_Read_RTC(RTC_I2C_BASEADDR, RTC_slave_address, MINU, readBuff, 1);
+    			 min = readBuff[0];
+    			 I2C_Read_RTC(RTC_I2C_BASEADDR, RTC_slave_address, SEG, readBuff, 1);
+    			 seg = readBuff[0];
+
+    			 seg = seg&REAL_SEC;//máscara para perder el 80 de oscilación y que empiece en 0
+
+
+    	 printf("HORA: %x, %x, %x\t", hrs,min,seg);
+
+
+   //  xTaskCreate(periodic_task, "PERIODIC_TASK", configMINIMAL_STACK_SIZE, NULL, RTC_task_PRIORITY, NULL);
+
+     vTaskStartScheduler();
+
+     for(;;) { /* Infinite loop to avoid leaving the main function */
+       __asm("NOP"); /* something to use as a breakpoint stop while looping */
+     }
+
+
+}

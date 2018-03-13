@@ -1,0 +1,25 @@
+freertos/source/list.o freertos/source/list.d: ../freertos/source/list.c \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/FreeRTOS.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\source/FreeRTOSConfig.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/projdefs.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/portable.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/deprecated_definitions.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\portable/portmacro.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/mpu_wrappers.h \
+ C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/list.h
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/FreeRTOS.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\source/FreeRTOSConfig.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/projdefs.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/portable.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/deprecated_definitions.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\portable/portmacro.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/mpu_wrappers.h:
+
+C:\Users\Robin\Documents\MCUXpressoIDE_10.1.1_606\workspace\i2c\freertos\include/list.h:
